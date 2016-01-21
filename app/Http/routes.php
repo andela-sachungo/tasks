@@ -1,20 +1,4 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -25,7 +9,33 @@ Route::get('/', function () {
 | kernel and includes session state, CSRF protection, and more.
 |
 */
+Route::group(['middleware' => 'web'], function () {
 
-Route::group(['middleware' => ['web']], function () {
-    //
+    /**
+     * Show the welcome page
+     */
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    /**
+     * Authentication Routes...
+     * Register all of the routes needed for registration, login, and password reset
+     */
+    Route::auth();
+
+    /**
+     * Get the task form
+     *
+     */
+    Route::get('/tasks', 'TaskController@index');
+    /**
+     * Add New Task
+     */
+    Route::post('/task', 'TaskController@store');
+
+    /**
+     * Delete Task
+     */
+    Route::delete('/task/{task}', 'TaskController@destroy');
 });
